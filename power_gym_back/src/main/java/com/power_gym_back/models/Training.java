@@ -1,9 +1,12 @@
 package com.power_gym_back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "training")
@@ -30,4 +33,8 @@ public class Training {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "feeling_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Feeling> feeling;
 }
