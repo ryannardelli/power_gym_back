@@ -34,7 +34,7 @@ public class Training {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "feeling_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Feeling> feeling;
+    private List<Feeling> feelings;
 }
