@@ -1,6 +1,13 @@
 package com.power_gym_back.controllers;
 
+import com.power_gym_back.dto.LoginRequestDto;
+import com.power_gym_back.dto.RegisterRequestDto;
+import com.power_gym_back.dto.AuthResponseDto;
 import com.power_gym_back.service.AuthService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,12 +21,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String email, @RequestParam String password) {
-        return authService.register(email, password);
+    @Operation(summary = "Registra usuário")
+    @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso!")
+    public AuthResponseDto register(@RequestBody RegisterRequestDto dto) {
+        return authService.register(dto);
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password) {
-        return authService.login(email, password);
+    @Operation(summary = "Realiza login do usuário")
+    @ApiResponse(responseCode = "200", description = "Login feito com sucesso!")
+    public AuthResponseDto login(@RequestBody LoginRequestDto dto) {
+        return authService.login(dto);
     }
 }

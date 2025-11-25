@@ -1,5 +1,8 @@
 package com.power_gym_back.service;
 
+import com.power_gym_back.dto.AuthResponseDto;
+import com.power_gym_back.dto.LoginRequestDto;
+import com.power_gym_back.dto.RegisterRequestDto;
 import com.power_gym_back.models.User;
 import com.power_gym_back.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,24 +17,27 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    // Registro
-    public String register(String email, String password) {
+    public AuthResponseDto register(RegisterRequestDto dto) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            return new AuthResponseDto("Usuário já existe!");
+        }
+
         User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
         userRepository.save(user);
-        return "Usuário registrado com sucesso!";
+
+        return new AuthResponseDto("Usuário registrado com sucesso!");
     }
 
-    // Login
-    public String login(String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            return "Usuário não encontrado!";
+    public AuthResponseDto login(LoginRequestDto dto) {
+        Optional<User> user = userRepository.findByEmail(dto.getEmail());
+
+        if (!user.get().getPassword().equals(dto.getPassword())) {
+            return new AuthResponseDto("Senha incorreta!");
         }
-        if (!user.get().getPassword().equals(password)) {
-            return "Senha incorreta!";
-        }
-        return "Login realizado com sucesso!";
+
+        return new AuthResponseDto("Login realizado com sucesso!");
     }
 }
